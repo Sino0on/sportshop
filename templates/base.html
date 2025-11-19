@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+{% load i18n %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans 'SportShop — Главная' %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% block style %}
+
+    {% endblock %}
+</head>
+<body>
+<div class="page">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container header-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">S</div>
+                <span>SportShop</span>
+            </a>
+
+            <nav class="nav">
+                <a href="{% url 'catalog' %}">{% trans 'Каталог' %}</a>
+                <a href="#">{% trans 'О нас' %}</a>
+                <a href="#">{% trans 'Контакты' %}</a>
+
+
+                <a href="#" class="btn-outline">{% trans 'Корзина' %}</a>
+                <a href="#" class="btn">{% trans 'Войти' %}</a>
+                <style>
+                    .lang-dropdown {
+    position: relative;
+    font-size: 14px;
+}
+
+.lang-current {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--text-soft);
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.lang-dropdown:hover .lang-current {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.lang-menu {
+    position: absolute;
+    top: 38px;
+    right: 0;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 8px 0;
+    width: 140px;
+    display: none;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.lang-dropdown:hover .lang-menu {
+    display: block;
+}
+
+.lang-menu a {
+    display: block;
+    padding: 8px 14px;
+    font-size: 14px;
+    color: var(--text-soft);
+    transition: 0.15s;
+}
+
+.lang-menu a:hover {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+                    </style>
+                <div class="lang-dropdown">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+
+
+                    <div class="lang-current">🌐 {{ LANGUAGE_CODE|upper }}</div>
+                    <div class="lang-menu">
+                        {% for lang in languages %}
+                        <a href="/{{ lang.code }}/">{{ lang.name_translated }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <span>{% trans '© 2025 SportShop. Все права защищены.' %}</span>
+            <span>{% trans 'Сделано с любовью к спорту.' %}</span>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

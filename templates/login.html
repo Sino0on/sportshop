@@ -1,0 +1,421 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block style %}
+    <style>
+        :root {
+            --bg: #0f172a;
+            --bg-soft: #111827;
+            --accent: #22c55e;
+            --accent-soft: rgba(34, 197, 94, 0.12);
+            --text: #f9fafb;
+            --text-soft: #9ca3af;
+            --border: #1f2937;
+            --card-bg: #020617;
+            --danger: #f97373;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* HEADER */
+        .header {
+            border-bottom: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 0, #4ade80, #22c55e 40%, #16a34a 70%, #064e3b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 15px;
+        }
+
+        .nav a {
+            color: var(--text-soft);
+        }
+
+        .nav a:hover {
+            color: var(--text);
+        }
+
+        .btn {
+            border-radius: 999px;
+            padding: 8px 16px;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: #022c22;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* LANGUAGE DROPDOWN */
+        .lang-dropdown {
+            position: relative;
+            font-size: 14px;
+        }
+
+        .lang-current {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            cursor: pointer;
+            color: var(--text-soft);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .lang-dropdown:hover .lang-current {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .lang-menu {
+            position: absolute;
+            top: 38px;
+            right: 0;
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 8px 0;
+            width: 140px;
+            display: none;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+        }
+
+        .lang-dropdown:hover .lang-menu {
+            display: block;
+        }
+
+        .lang-menu a {
+            display: block;
+            padding: 8px 14px;
+            font-size: 14px;
+            color: var(--text-soft);
+            transition: 0.15s;
+        }
+
+        .lang-menu a:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        /* AUTH LAYOUT */
+        .auth-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px 40px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-soft);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 24px 22px 22px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.65);
+        }
+
+        .auth-head {
+            margin-bottom: 18px;
+        }
+
+        .auth-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .auth-subtitle {
+            font-size: 13px;
+            color: var(--text-soft);
+        }
+
+        .auth-subtitle a {
+            color: var(--accent);
+        }
+
+        .auth-form {
+            display: grid;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .field-label {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .field-label span {
+            color: var(--danger);
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            font-size: 13px;
+        }
+
+        .field input {
+            padding: 8px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .field input::placeholder {
+            color: #4b5563;
+        }
+
+        .field-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-soft);
+            margin-top: 4px;
+        }
+
+        .field-row-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .field-row input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+        }
+
+        .field-row a {
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .auth-submit {
+            margin-top: 6px;
+        }
+
+        .auth-submit button {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: #022c22;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 9px 16px;
+            cursor: pointer;
+        }
+
+        .auth-or {
+            margin: 14px 0 8px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-soft);
+            text-align: center;
+            position: relative;
+        }
+
+        .auth-or::before,
+        .auth-or::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .auth-or::before {
+            left: 0;
+        }
+
+        .auth-or::after {
+            right: 0;
+        }
+
+        .auth-social {
+            display: grid;
+            gap: 8px;
+        }
+
+        .auth-social button {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: var(--text-soft);
+            font-size: 13px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .auth-footer-text {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-soft);
+            text-align: center;
+        }
+
+        .auth-footer-text a {
+            color: var(--accent);
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: auto;
+            padding: 16px 0 20px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .header-inner {
+                gap: 12px;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .auth-card {
+                padding: 20px 16px 18px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <!-- AUTH CONTENT -->
+    <main class="auth-wrap">
+        <div class="auth-card">
+            <div class="auth-head">
+                <div class="auth-title">Войти в аккаунт</div>
+                <div class="auth-subtitle">
+                    Нет аккаунта? <a href="{% url 'register' %}">Создать</a>
+                </div>
+            </div>
+
+            <form class="auth-form" action="#" method="post">
+                <div class="field">
+                    <label class="field-label" for="email">Email <span>*</span></label>
+                    <input id="email" name="email" type="email" placeholder="you@example.com" required>
+                </div>
+
+                <div class="field">
+                    <label class="field-label" for="password">Пароль <span>*</span></label>
+                    <input id="password" name="password" type="password" placeholder="Введите пароль" required>
+                    <div class="field-row">
+                        <label class="field-row-left">
+                            <input type="checkbox" name="remember">
+                            <span>Запомнить меня</span>
+                        </label>
+                        <a href="#">Забыли пароль?</a>
+                    </div>
+                </div>
+
+                <div class="auth-submit">
+                    <button type="submit">Войти</button>
+                </div>
+
+                <div class="auth-or">или</div>
+
+                <div class="auth-social">
+                    <button type="button">Войти через Google</button>
+                    <button type="button">Войти через Facebook</button>
+                </div>
+            </form>
+
+            <div class="auth-footer-text">
+                Заходя в аккаунт, вы соглашаетесь с условиями сервиса и политикой конфиденциальности.
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

@@ -1,0 +1,852 @@
+{% extends 'base.html' %}
+
+{% block style %}
+    <style>
+        :root {
+            --bg: #0f172a;
+            --bg-soft: #111827;
+            --accent: #22c55e;
+            --accent-soft: rgba(34, 197, 94, 0.12);
+            --text: #f9fafb;
+            --text-soft: #9ca3af;
+            --border: #1f2937;
+            --card-bg: #020617;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* HEADER (как на главной) */
+        .header {
+            border-bottom: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 0, #4ade80, #22c55e 40%, #16a34a 70%, #064e3b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 15px;
+        }
+
+        .nav a {
+            color: var(--text-soft);
+        }
+
+        .nav a:hover {
+            color: var(--text);
+        }
+
+        .btn {
+            border-radius: 999px;
+            padding: 8px 16px;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: #022c22;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* PAGE TITLE / BREADCRUMB */
+        .page-head {
+            padding: 24px 0 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-head-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .breadcrumbs {
+            font-size: 12px;
+            color: var(--text-soft);
+            margin-bottom: 4px;
+        }
+
+        .page-title {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-soft);
+        }
+
+        .page-head-right {
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        /* LAYOUT */
+        .catalog {
+            padding: 20px 0 32px;
+        }
+
+        .catalog-layout {
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 24px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background: var(--bg-soft);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            padding: 16px;
+            font-size: 13px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 18px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 12px;
+            color: var(--text-soft);
+            margin-bottom: 6px;
+        }
+
+        .checkbox-list {
+            list-style: none;
+            display: grid;
+            gap: 6px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-soft);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+        }
+
+        .price-range {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            color: var(--text-soft);
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .price-inputs input {
+            width: 100%;
+            padding: 6px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: var(--text);
+            font-size: 12px;
+        }
+
+        .sidebar-apply {
+            margin-top: 8px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-small {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: var(--text-soft);
+            cursor: pointer;
+        }
+
+        .btn-small:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .sidebar-reset {
+            font-size: 12px;
+            color: var(--text-soft);
+            margin-top: 6px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* TOOLBAR */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            gap: 12px;
+            font-size: 13px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-search {
+            position: relative;
+        }
+
+        .toolbar-search input {
+            padding: 7px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: var(--text);
+            font-size: 13px;
+            min-width: 220px;
+        }
+
+        .toolbar-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 4px 8px;
+            font-size: 11px;
+            color: var(--text-soft);
+        }
+
+        .tag--active {
+            border-color: rgba(34, 197, 94, 0.7);
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-select {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: var(--text-soft);
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+
+        .toolbar-count {
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        /* PRODUCT GRID */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 16px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 260px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+
+        .product-image-wrap {
+            position: relative;
+            padding-top: 70%;
+            background: radial-gradient(circle at 50% 0, rgba(34, 197, 94, 0.12), transparent 55%);
+        }
+
+        .product-image {
+            position: absolute;
+            inset: 12px;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-badge {
+            position: absolute;
+            left: 14px;
+            top: 14px;
+            font-size: 10px;
+            padding: 3px 7px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(34, 197, 94, 0.6);
+            color: var(--accent);
+        }
+
+        .product-body {
+            padding: 12px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .product-category {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--text-soft);
+        }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .product-price {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .product-rating span:last-child {
+            font-size: 11px;
+        }
+
+        .product-footer {
+            padding: 0 12px 10px;
+        }
+
+        .product-add {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            font-size: 13px;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+
+        .product-add:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 18px;
+            font-size: 13px;
+        }
+
+        .page-link {
+            border-radius: 999px;
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            color: var(--text-soft);
+            cursor: pointer;
+        }
+
+        .page-link--active {
+            border-color: rgba(34, 197, 94, 0.7);
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .page-link:hover {
+            border-color: rgba(34, 197, 94, 0.7);
+            color: var(--accent);
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: auto;
+            padding: 20px 0 24px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        @media (max-width: 960px) {
+            .catalog-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-inner {
+                gap: 12px;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .page-head-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .toolbar-search input {
+                min-width: 0;
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <!-- PAGE HEAD -->
+    <div class="page-head">
+        <div class="container">
+            <div class="breadcrumbs">
+                Главная / Каталог
+            </div>
+            <div class="page-head-top">
+                <div>
+                    <h1 class="page-title">Каталог</h1>
+                    <p class="page-subtitle">
+                        Найди свою экипировку для бега, зала, футбола и других видов спорта.
+                    </p>
+                </div>
+                <div class="page-head-right">
+                    Доступно 124 товара
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CATALOG -->
+    <main class="catalog">
+        <div class="container catalog-layout">
+
+            <!-- SIDEBAR FILTERS -->
+            <aside class="sidebar">
+                <!-- Категории -->
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Категории</div>
+                    <ul class="checkbox-list">
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="cat-running" checked>
+                            <label for="cat-running">Бег</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="cat-gym">
+                            <label for="cat-gym">Тренажёрный зал</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="cat-football">
+                            <label for="cat-football">Футбол</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="cat-basketball">
+                            <label for="cat-basketball">Баскетбол</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="cat-fitness">
+                            <label for="cat-fitness">Фитнес / Йога</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Бренды -->
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Бренды</div>
+                    <ul class="checkbox-list">
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="brand-nike">
+                            <label for="brand-nike">Nike</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="brand-adidas">
+                            <label for="brand-adidas">Adidas</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="brand-puma">
+                            <label for="brand-puma">Puma</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="brand-reebok">
+                            <label for="brand-reebok">Reebok</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="brand-asics">
+                            <label for="brand-asics">Asics</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Цена -->
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Цена</div>
+                    <div class="sidebar-subtitle">Диапазон (сом)</div>
+                    <div class="price-range">
+                        <div class="price-inputs">
+                            <input type="number" placeholder="от 1000">
+                            <input type="number" placeholder="до 20000">
+                        </div>
+                    </div>
+                    <div class="sidebar-apply">
+                        <button class="btn-small" type="button">Применить</button>
+                    </div>
+                    <div class="sidebar-reset">
+                        Сбросить фильтры
+                    </div>
+                </div>
+
+                <!-- Дополнительно -->
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Дополнительно</div>
+                    <ul class="checkbox-list">
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="filter-new">
+                            <label for="filter-new">Новинки</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="filter-sale">
+                            <label for="filter-sale">Со скидкой</label>
+                        </li>
+                        <li class="checkbox-item">
+                            <input type="checkbox" id="filter-stock">
+                            <label for="filter-stock">В наличии</label>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- CONTENT -->
+            <section>
+                <!-- TOOLBAR -->
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="toolbar-search">
+                            <input type="text" placeholder="Поиск по товарам">
+                        </div>
+                        <div class="toolbar-tags">
+                            <div class="tag tag--active">Все</div>
+                            <div class="tag">Бег</div>
+                            <div class="tag">Зал</div>
+                            <div class="tag">Футбол</div>
+                        </div>
+                    </div>
+                    <div class="toolbar-right">
+                        <span class="toolbar-count">Показано 12 из 124</span>
+                        <select class="toolbar-select">
+                            <option>Сначала популярные</option>
+                            <option>По цене: сначала дешевле</option>
+                            <option>По цене: сначала дороже</option>
+                            <option>По рейтингу</option>
+                            <option>По новизне</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- PRODUCT GRID -->
+                <div class="product-grid">
+
+                    <!-- Пример карточек. Потом ты это заменишь циклом по Product -->
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Running+Shoes+1" alt="Кроссовки Runner Pro 1">
+                                </div>
+                                <div class="product-badge">Новинка</div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">NIKE • Бег</div>
+                            <a href="#">
+                                <h3 class="product-title">Кроссовки Runner Pro 1</h3>
+                            </a>
+                            <div class="product-meta">
+                                <div class="product-price">5 990 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span>
+                                    <span>4.9 (32)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Running+Shoes+2" alt="Кроссовки Runner Pro 2">
+                                </div>
+                                <div class="product-badge">Хит</div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">ADIDAS • Бег</div>
+                            <a href="#">
+                                <h3 class="product-title">Кроссовки Runner Pro 2</h3>
+                            </a>
+                            <div class="product-meta">
+                                <div class="product-price">7 200 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span>
+                                    <span>4.8 (41)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Gym+Gloves" alt="Перчатки Grip Pro">
+                                </div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">REEBOK • Зал</div>
+                            <a href="#">
+                                <h3 class="product-title">Перчатки для зала Grip Pro</h3>
+                            </a>
+                            <div class="product-meta">
+                                <div class="product-price">1 650 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span>
+                                    <span>4.7 (19)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Lifting+Belt" alt="Пояс PowerLift">
+                                </div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">POWER • Зал</div>
+                            <a href="#">
+                                <h3 class="product-title">Пояс для тяжёлой атлетики PowerLift</h3>
+                            </a>
+                            <div class="product-meta">
+                                <div class="product-price">3 400 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span>
+                                    <span>4.8 (27)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Football+Boots" alt="Бутсы Street Control">
+                                </div>
+                                <div class="product-badge">-20%</div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">NIKE • Футбол</div>
+                            <a href="#">
+                                <h3 class="product-title">Бутсы Street Control</h3>
+                            </a>
+                            <div class="product-meta">
+                                <div class="product-price">4 800 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span>
+                                    <span>4.6 (14)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Basketball+Shoes" alt="Кроссовки Court Jump">
+                                </div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">PUMA • Баскетбол</div>
+                            <a href="#">
+                                <h3 class="product-title">Кроссовки Court Jump</h3>
+                            </a>
+                            <div class="product-meta">
+                                <div class="product-price">6 100 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span>
+                                    <span>4.5 (11)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+
+                    <!-- добавь ещё карточек, если нужно заполнить сетку -->
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="pagination">
+                    <span class="page-link">&laquo;</span>
+                    <span class="page-link page-link--active">1</span>
+                    <span class="page-link">2</span>
+                    <span class="page-link">3</span>
+                    <span class="page-link">&raquo;</span>
+                </div>
+            </section>
+        </div>
+    </main>
+{% endblock %}
