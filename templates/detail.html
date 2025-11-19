@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>SportShop — Кроссовки Runner Pro 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --bg: #0f172a;
+            --bg-soft: #111827;
+            --accent: #22c55e;
+            --accent-soft: rgba(34, 197, 94, 0.12);
+            --text: #f9fafb;
+            --text-soft: #9ca3af;
+            --border: #1f2937;
+            --card-bg: #020617;
+            --danger: #f97373;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* HEADER */
+        .header {
+            border-bottom: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 0, #4ade80, #22c55e 40%, #16a34a 70%, #064e3b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 15px;
+        }
+
+        .nav a {
+            color: var(--text-soft);
+        }
+
+        .nav a:hover {
+            color: var(--text);
+        }
+
+        .btn {
+            border-radius: 999px;
+            padding: 8px 16px;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: #022c22;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* LANGUAGE DROPDOWN */
+        .lang-dropdown {
+            position: relative;
+            font-size: 14px;
+        }
+
+        .lang-current {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            cursor: pointer;
+            color: var(--text-soft);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .lang-dropdown:hover .lang-current {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .lang-menu {
+            position: absolute;
+            top: 38px;
+            right: 0;
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 8px 0;
+            width: 140px;
+            display: none;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+        }
+
+        .lang-dropdown:hover .lang-menu {
+            display: block;
+        }
+
+        .lang-menu a {
+            display: block;
+            padding: 8px 14px;
+            font-size: 14px;
+            color: var(--text-soft);
+            transition: 0.15s;
+        }
+
+        .lang-menu a:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        /* BREADCRUMBS / HEAD */
+        .page-head {
+            padding: 24px 0 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .breadcrumbs {
+            font-size: 12px;
+            color: var(--text-soft);
+            margin-bottom: 6px;
+        }
+
+        .breadcrumbs a {
+            color: var(--text-soft);
+        }
+
+        .product-title-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .product-title-main h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .product-labels {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-soft);
+        }
+
+        .pill--accent {
+            border-color: rgba(34, 197, 94, 0.7);
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        /* LAYOUT MAIN */
+        .product-layout {
+            padding: 20px 0 32px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+            gap: 24px;
+        }
+
+        /* IMAGE GALLERY */
+        .gallery {
+            display: grid;
+            grid-template-columns: 80px minmax(0, 1fr);
+            gap: 12px;
+        }
+
+        .thumbs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .thumb {
+            width: 100%;
+            padding-top: 100%;
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .thumb img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumb--active {
+            border-color: rgba(34, 197, 94, 0.8);
+        }
+
+        .main-image {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: radial-gradient(circle at 50% 0, rgba(34, 197, 94, 0.12), transparent 60%);
+        }
+
+        .main-image::before {
+            content: "";
+            display: block;
+            padding-top: 72%;
+        }
+
+        .main-image img {
+            position: absolute;
+            inset: 16px;
+            width: calc(100% - 32px);
+            height: calc(100% - 32px);
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+        .gallery-badge {
+            position: absolute;
+            left: 18px;
+            top: 16px;
+            font-size: 11px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(34, 197, 94, 0.6);
+            color: var(--accent);
+        }
+
+        .gallery-zoom {
+            position: absolute;
+            right: 18px;
+            bottom: 16px;
+            font-size: 11px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border);
+            color: var(--text-soft);
+        }
+
+        /* INFO BLOCK */
+        .info-block {
+            background: var(--bg-soft);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            padding: 18px 16px;
+            font-size: 14px;
+        }
+
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .info-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-brand {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-soft);
+        }
+
+        .info-name {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .info-code {
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .info-rating {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .stars {
+            color: #facc15;
+            font-size: 13px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 14px 0;
+        }
+
+        .price-main {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .price-old {
+            font-size: 13px;
+            color: var(--text-soft);
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+
+        .price-note {
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .stock {
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .stock--ok {
+            color: #4ade80;
+        }
+
+        .stock--low {
+            color: #facc15;
+        }
+
+        .stock--out {
+            color: var(--danger);
+        }
+
+        .options {
+            margin-bottom: 14px;
+        }
+
+        .options-label {
+            font-size: 13px;
+            color: var(--text-soft);
+            margin-bottom: 6px;
+        }
+
+        .options-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            font-size: 13px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            color: var(--text-soft);
+        }
+
+        .chip--active {
+            border-color: rgba(34, 197, 94, 0.7);
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .buy-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .qty {
+            display: flex;
+            align-items: center;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            background: #020617;
+        }
+
+        .qty button {
+            background: transparent;
+            border: none;
+            color: var(--text-soft);
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .qty input {
+            width: 40px;
+            border: none;
+            background: transparent;
+            text-align: center;
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .btn-buy {
+            border-radius: 999px;
+            padding: 8px 18px;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: #022c22;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-second {
+            border-radius: 999px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: var(--text-soft);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .meta-list {
+            margin-top: 16px;
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .meta-list dt {
+            float: left;
+            width: 90px;
+            color: var(--text-soft);
+        }
+
+        .meta-list dd {
+            margin-left: 94px;
+            margin-bottom: 4px;
+        }
+
+        .info-bottom-note {
+            margin-top: 14px;
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        /* DESCRIPTION / TABS */
+        .product-sections {
+            padding-top: 4px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 14px;
+        }
+
+        .tab {
+            font-size: 13px;
+            padding: 8px 10px;
+            border-bottom: 2px solid transparent;
+            color: var(--text-soft);
+            cursor: pointer;
+        }
+
+        .tab--active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+            gap: 24px;
+        }
+
+        .desc-block,
+        .specs-block {
+            background: var(--bg-soft);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            padding: 14px 16px;
+            font-size: 13px;
+        }
+
+        .desc-block h2,
+        .specs-block h2 {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .desc-block p + p {
+            margin-top: 6px;
+        }
+
+        .specs-list {
+            list-style: none;
+        }
+
+        .specs-list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 4px 0;
+            border-bottom: 1px dashed rgba(31, 41, 55, 0.8);
+        }
+
+        .specs-list span:first-child {
+            color: var(--text-soft);
+        }
+
+        .specs-list span:last-child {
+            text-align: right;
+        }
+
+        /* REVIEWS */
+        .reviews-block {
+            margin-top: 20px;
+            background: var(--bg-soft);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            padding: 14px 16px 16px;
+            font-size: 13px;
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .reviews-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .reviews-summary {
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .reviews-summary strong {
+            font-size: 16px;
+            color: #facc15;
+        }
+
+        .review-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .review-item {
+            padding: 10px 0;
+            border-top: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 10px;
+        }
+
+        .review-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: #020617;
+        }
+
+        .review-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .review-body {
+            font-size: 13px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .review-author {
+            font-weight: 500;
+        }
+
+        .review-meta {
+            font-size: 11px;
+            color: var(--text-soft);
+        }
+
+        .review-stars {
+            color: #facc15;
+            font-size: 12px;
+        }
+
+        .review-text {
+            margin-top: 2px;
+        }
+
+        .review-image {
+            margin-top: 6px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .review-image img {
+            width: 100%;
+            max-width: 180px;
+            display: block;
+        }
+
+        .review-add {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .review-add button {
+            border-radius: 999px;
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: var(--text-soft);
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* RELATED PRODUCTS */
+        .related {
+            padding: 20px 0 32px;
+        }
+
+        .related-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 14px;
+        }
+
+        .related-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .related-link {
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .product-grid-small {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 14px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 230px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+
+        .product-image-wrap {
+            position: relative;
+            padding-top: 70%;
+            background: radial-gradient(circle at 50% 0, rgba(34, 197, 94, 0.12), transparent 55%);
+        }
+
+        .product-image {
+            position: absolute;
+            inset: 12px;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-body {
+            padding: 10px 12px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            font-size: 13px;
+        }
+
+        .product-category {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--text-soft);
+        }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .product-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .product-footer {
+            padding: 0 12px 10px;
+        }
+
+        .product-add {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            font-size: 12px;
+            padding: 6px 8px;
+            cursor: pointer;
+        }
+
+        .product-add:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: auto;
+            padding: 20px 0 24px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        @media (max-width: 960px) {
+            .product-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .gallery {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .thumbs {
+                flex-direction: row;
+                order: 2;
+            }
+
+            .thumb {
+                max-width: 80px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-inner {
+                gap: 12px;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .section-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container header-inner">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">S</div>
+                <span>SportShop</span>
+            </a>
+
+            <nav class="nav">
+                <a href="catalog.html">Каталог</a>
+                <a href="#">О нас</a>
+                <a href="#">Контакты</a>
+
+                <div class="lang-dropdown">
+                    <div class="lang-current">🌐 KG</div>
+                    <div class="lang-menu">
+                        <a href="/kg/">Кыргызча</a>
+                        <a href="/ru/">Русский</a>
+                        <a href="/en/">English</a>
+                    </div>
+                </div>
+
+                <a href="#" class="btn-outline">Корзина</a>
+                <a href="login.html" class="btn">Войти</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEAD -->
+    <div class="page-head">
+        <div class="container">
+            <div class="breadcrumbs">
+                <a href="index.html">Главная</a> / <a href="catalog.html">Каталог</a> / <a href="#">Бег</a> / <span>Кроссовки Runner Pro 1</span>
+            </div>
+            <div class="product-title-main">
+                <h1>Кроссовки Runner Pro 1</h1>
+                <div class="product-labels">
+                    <span class="pill pill--accent">Новинка</span>
+                    <span class="pill">Бесплатная доставка</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT BODY -->
+    <main class="product-layout">
+        <div class="container product-grid">
+
+            <!-- LEFT: GALLERY -->
+            <section class="gallery">
+                <div class="thumbs">
+                    <div class="thumb thumb--active">
+                        <img src="https://via.placeholder.com/400x400?text=Runner+1" alt="Кроссовки Runner Pro 1 вид 1">
+                    </div>
+                    <div class="thumb">
+                        <img src="https://via.placeholder.com/400x400?text=Runner+2" alt="Кроссовки Runner Pro 1 вид 2">
+                    </div>
+                    <div class="thumb">
+                        <img src="https://via.placeholder.com/400x400?text=Runner+3" alt="Кроссовки Runner Pro 1 вид 3">
+                    </div>
+                    <div class="thumb">
+                        <img src="https://via.placeholder.com/400x400?text=Runner+4" alt="Кроссовки Runner Pro 1 вид 4">
+                    </div>
+                </div>
+
+                <div class="main-image">
+                    <span class="gallery-badge">Running</span>
+                    <img src="https://via.placeholder.com/800x600?text=Runner+Main" alt="Кроссовки Runner Pro 1">
+                    <span class="gallery-zoom">Увеличить</span>
+                </div>
+            </section>
+
+            <!-- RIGHT: INFO -->
+            <section class="info-block">
+                <div class="info-header">
+                    <div class="info-left">
+                        <div class="info-brand">NIKE • Бег</div>
+                        <div class="info-name">Кроссовки Runner Pro 1</div>
+                        <div class="info-code">Артикул: RP1-2025</div>
+                    </div>
+                    <div class="info-rating">
+                        <div class="stars">★★★★★</div>
+                        <div>4.9 / 5 · 32 отзыва</div>
+                    </div>
+                </div>
+
+                <div class="price-row">
+                    <div>
+                        <span class="price-main">5 990 cом</span>
+                        <span class="price-old">6 790 cом</span>
+                    </div>
+                    <div class="price-note">Экономия 800 cом</div>
+                </div>
+
+                <div class="stock stock--ok">
+                    В наличии · осталось 7 пар
+                </div>
+
+                <div class="options">
+                    <div class="options-label">Размер (EU)</div>
+                    <div class="options-row">
+                        <div class="chip">39</div>
+                        <div class="chip chip--active">40</div>
+                        <div class="chip">41</div>
+                        <div class="chip">42</div>
+                        <div class="chip">43</div>
+                    </div>
+                </div>
+
+                <div class="options">
+                    <div class="options-label">Цвет</div>
+                    <div class="options-row">
+                        <div class="chip chip--active">Чёрный / Зелёный</div>
+                        <div class="chip">Белый / Синий</div>
+                    </div>
+                </div>
+
+                <div class="buy-row">
+                    <div class="qty">
+                        <button type="button">−</button>
+                        <input type="number" value="1" min="1">
+                        <button type="button">+</button>
+                    </div>
+                    <button class="btn-buy" type="button">Добавить в корзину</button>
+                    <button class="btn-second" type="button">Купить в 1 клик</button>
+                </div>
+
+                <dl class="meta-list">
+                    <dt>Категория</dt><dd>Беговые кроссовки</dd>
+                    <dt>Бренд</dt><dd>NIKE</dd>
+                    <dt>Материал</dt><dd>Текстиль / Синтетика</dd>
+                    <dt>Сезон</dt><dd>Весна–лето</dd>
+                </dl>
+
+                <div class="info-bottom-note">
+                    Доставка по Бишкеку 1–2 дня, по регионам 2–4 дня. Возможен самовывоз из наших пунктов выдачи.
+                </div>
+            </section>
+        </div>
+
+        <!-- DESCRIPTION + SPECS + REVIEWS -->
+        <div class="container product-sections">
+            <div class="tabs">
+                <div class="tab tab--active">Описание</div>
+                <div class="tab">Характеристики</div>
+                <div class="tab">Отзывы (32)</div>
+            </div>
+
+            <div class="section-grid">
+                <section class="desc-block">
+                    <h2>Описание</h2>
+                    <p>
+                        Runner Pro 1 — лёгкие и устойчивые кроссовки для ежедневных пробежек по городу
+                        и беговой дорожке. Дышащий верх обеспечивает хорошую вентиляцию, а амортизирующая
+                        подошва снижает нагрузку на суставы.
+                    </p>
+                    <p>
+                        Обновлённая подошва с усиленным сцеплением даёт уверенность на влажном асфальте,
+                        а мягкий задник фиксирует пятку и предотвращает натирание.
+                    </p>
+                    <p>
+                        Подходят как для начинающих бегунов, так и для тех, кто тренируется 3–4 раза в неделю.
+                    </p>
+                </section>
+
+                <section class="specs-block">
+                    <h2>Характеристики</h2>
+                    <ul class="specs-list">
+                        <li>
+                            <span>Тип обуви</span>
+                            <span>Беговые кроссовки</span>
+                        </li>
+                        <li>
+                            <span>Поверхность</span>
+                            <span>Асфальт / Дорожка</span>
+                        </li>
+                        <li>
+                            <span>Амортизация</span>
+                            <span>Средняя</span>
+                        </li>
+                        <li>
+                            <span>Дроп</span>
+                            <span>8 мм</span>
+                        </li>
+                        <li>
+                            <span>Вес</span>
+                            <span>260 г (размер 42)</span>
+                        </li>
+                        <li>
+                            <span>Материал верха</span>
+                            <span>Сетчатый текстиль</span>
+                        </li>
+                        <li>
+                            <span>Подошва</span>
+                            <span>EVA + резина</span>
+                        </li>
+                        <li>
+                            <span>Код товара</span>
+                            <span>RP1-2025</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+
+            <!-- REVIEWS -->
+            <section class="reviews-block">
+                <div class="reviews-header">
+                    <div>
+                        <div class="reviews-title">Отзывы покупателей</div>
+                        <div class="reviews-summary">
+                            Средняя оценка: <strong>4.9</strong> из 5 · 32 отзыва
+                        </div>
+                    </div>
+                    <div class="reviews-summary">
+                        <div>★★★★★ — 28</div>
+                        <div>★★★★☆ — 4</div>
+                    </div>
+                </div>
+
+                <div class="review-list">
+                    <article class="review-item">
+                        <div class="review-avatar">
+                            <img src="https://via.placeholder.com/64x64?text=A" alt="Аватар">
+                        </div>
+                        <div class="review-body">
+                            <div class="review-header">
+                                <div>
+                                    <div class="review-author">Азамат</div>
+                                    <div class="review-meta">Бишкек · 2 недели назад</div>
+                                </div>
+                                <div class="review-stars">★★★★★</div>
+                            </div>
+                            <div class="review-text">
+                                Очень лёгкие и удобные. Бегаю по 5–7 км через день, ноги не устают,
+                                пятка фиксируется хорошо. Размер в размер.
+                            </div>
+                            <div class="review-image">
+                                <img src="https://via.placeholder.com/300x200?text=Review+Photo" alt="Фото отзыва">
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="review-item">
+                        <div class="review-avatar">
+                            <img src="https://via.placeholder.com/64x64?text=N" alt="Аватар">
+                        </div>
+                        <div class="review-body">
+                            <div class="review-header">
+                                <div>
+                                    <div class="review-author">Нурбек</div>
+                                    <div class="review-meta">Ош · 1 месяц назад</div>
+                                </div>
+                                <div class="review-stars">★★★★☆</div>
+                            </div>
+                            <div class="review-text">
+                                Кроссовки супер, но пришлось взять на полразмера больше. Для зала и
+                                дорожки — идеально.
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="review-add">
+                    <button type="button">Оставить отзыв</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- RELATED PRODUCTS -->
+        <section class="related">
+            <div class="container">
+                <div class="related-header">
+                    <div class="related-title">Похожие товары</div>
+                    <div class="related-link"><a href="catalog.html">Перейти в каталог</a></div>
+                </div>
+
+                <div class="product-grid-small">
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Runner+2" alt="Runner Pro 2">
+                                </div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">ADIDAS • Бег</div>
+                            <a href="#"><h3 class="product-title">Кроссовки Runner Pro 2</h3></a>
+                            <div class="product-meta">
+                                <div class="product-price">7 200 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span><span>4.8</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Trail+Shoes" alt="Trail Runner">
+                                </div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">ASICS • Трейл</div>
+                            <a href="#"><h3 class="product-title">Кроссовки Trail Runner</h3></a>
+                            <div class="product-meta">
+                                <div class="product-price">8 100 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span><span>4.7</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Gym+Shoes" alt="Gym Pro">
+                                </div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">PUMA • Зал</div>
+                            <a href="#"><h3 class="product-title">Кроссовки Gym Pro</h3></a>
+                            <div class="product-meta">
+                                <div class="product-price">4 990 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span><span>4.6</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="#">
+                            <div class="product-image-wrap">
+                                <div class="product-image">
+                                    <img src="https://via.placeholder.com/400x300?text=Everyday+Shoes" alt="Everyday Light">
+                                </div>
+                            </div>
+                        </a>
+                        <div class="product-body">
+                            <div class="product-category">NIKE • Lifestyle</div>
+                            <a href="#"><h3 class="product-title">Кроссовки Everyday Light</h3></a>
+                            <div class="product-meta">
+                                <div class="product-price">5 400 cом</div>
+                                <div class="product-rating">
+                                    <span>★</span><span>4.5</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <button class="product-add" type="button">В корзину</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <span>© 2025 SportShop. Все права защищены.</span>
+            <span>Сделано для спорта и движения.</span>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
