@@ -20,6 +20,10 @@ class ProductListView(generic.ListView):
     template_name = 'catalog.html'
     context_object_name = 'products'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
 
 
 class RegisterView(generic.TemplateView):
